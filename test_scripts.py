@@ -200,7 +200,7 @@ def remove_skill(driver, wait):
 
 @allure.step("Accept skill")
 def accept_skill(driver, wait):
-    accept_skill_button = wait.until(EC.element_to_be_clickable((By.XPATH, "/html/body/ngx-app/ngx-pages/ngx-one-column-layout/nb-layout/div[Requires: sign_in_to_dashboard]1]/div/div/div/div/nb-layout-column/assign-skills/div/div/div[2]/nb-card/nb-card-body/div[1]/nb-list/nb-list-item[1]/div/span[4]/span/span")))
+    accept_skill_button = wait.until(EC.element_to_be_clickable((By.XPATH, "/html/body/ngx-app/ngx-pages/ngx-one-column-layout/nb-layout/div[1]/div/div/div/div/nb-layout-column/assign-skills/div/div/div[2]/nb-card/nb-card-body/div[1]/nb-list/nb-list-item[1]/div/span[4]/span/span")))
     accept_skill_button.click()
     allure.attach(driver.get_screenshot_as_png(), name="skill_accepted", attachment_type=AttachmentType.PNG)
     return "Skill accepted"
@@ -256,7 +256,7 @@ def test_select_profile(setup):
 
 @allure.title("Test 6: Verify profile name")
 @allure.description("Checks if the profile name matches the expected value.")
-@allure.severity(Severity.NORMAL)
+@allure.severity(Severity.Major)
 def test_verify_profile_name(setup):
     driver, wait = setup
     open_website(driver, wait)
@@ -268,10 +268,272 @@ def test_verify_profile_name(setup):
 
 @allure.title("Test 7: Verify profile email")
 @allure.description("Checks if the profile email matches the expected value.")
-@allure.severity(Severity.NORMAL)
+@allure.severity(Severity.Major)
 def test_verify_profile_email(setup):
     driver, wait = setup
     open_website(driver, wait)
     sign_in_to_dashboard(driver, wait)
     click_user_profile(driver, wait)
-    select
+    select_profile(driver, wait)
+    result = verify_profile_detail(driver, wait, "Email", "//p[span[contains(text(),'Email:')]]", "pratik.wavhal@datafortune.com")
+    print(result)
+
+@allure.title("Test 8: Verify profile employee ID")
+@allure.description("Checks if the employee ID matches the expected value.")
+@allure.severity(Severity.Major)
+def test_verify_profile_employee_id(setup):
+    driver, wait = setup
+    open_website(driver, wait)
+    sign_in_to_dashboard(driver, wait)
+    click_user_profile(driver, wait)
+    select_profile(driver, wait)
+    result = verify_profile_detail(driver, wait, "Employee Id", "//p[span[contains(text(),'Employee Id:')]]", "DS1342")
+    print(result)
+
+@allure.title("Test 9: Verify profile designation")
+@allure.description("Checks if the designation matches the expected value.")
+@allure.severity(Severity.Major)
+def test_verify_profile_designation(setup):
+    driver, wait = setup
+    open_website(driver, wait)
+    sign_in_to_dashboard(driver, wait)
+    click_user_profile(driver, wait)
+    select_profile(driver, wait)
+    result = verify_profile_detail(driver, wait, "Designation", "//p[span[contains(text(),'Designation:')]]", "Software Test Engineer")
+    print(result)
+
+@allure.title("Test 10: Verify profile experience")
+@allure.description("Checks if the experience matches the expected value.")
+@allure.severity(Severity.Major)
+def test_verify_profile_experience(setup):
+    driver, wait = setup
+    open_website(driver, wait)
+    sign_in_to_dashboard(driver, wait)
+    click_user_profile(driver, wait)
+    select_profile(driver, wait)
+    result = verify_profile_detail(driver, wait, "Experience", "/html/body/ngx-app/ngx-pages/ngx-one-column-layout/nb-layout/div[1]/div/div/div/div/nb-layout-column/user-profile/div[2]/div/div/div/p[5]", "0.6 Years")
+    print(result)
+
+@allure.title("Test 11: Verify profile function")
+@allure.description("Checks if the function matches the expected value.")
+@allure.severity(Severity.Major)
+def test_verify_profile_function(setup):
+    driver, wait = setup
+    open_website(driver, wait)
+    sign_in_to_dashboard(driver, wait)
+    click_user_profile(driver, wait)
+    select_profile(driver, wait)
+    result = verify_profile_detail(driver, wait, "Function", "/html/body/ngx-app/ngx-pages/ngx-one-column-layout/nb-layout/div[1]/div/div/div/div/nb-layout-column/user-profile/div[2]/div/div/div/p[6]", "Delivery")
+    print(result)
+
+@allure.title("Test 12: Click Assign Skills button")
+@allure.description("Verifies clicking the Assign Skills button.")
+@allure.severity(Severity.CRITICAL)
+def test_click_assign_skills_button(setup):
+    driver, wait = setup
+    open_website(driver, wait)
+    sign_in_to_dashboard(driver, wait)
+    result = click_assign_skills_button(driver, wait)
+    print(result)
+
+@allure.title("Test 13: Click Add Skills button")
+@allure.description("Verifies clicking the Add Skills button.")
+@allure.severity(Severity.CRITICAL)
+def test_click_add_skills_button(setup):
+    driver, wait = setup
+    open_website(driver, wait)
+    sign_in_to_dashboard(driver, wait)
+    click_assign_skills_button(driver, wait)
+    result = click_add_skills_button(driver, wait)
+    print(result)
+
+@allure.title("Test 14: Select category")
+@allure.description("Tests selecting a category from the dropdown.")
+@allure.severity(Severity.CRITICAL)
+def test_select_category(setup):
+    driver, wait = setup
+    open_website(driver, wait)
+    sign_in_to_dashboard(driver, wait)
+    click_assign_skills_button(driver, wait)
+    click_add_skills_button(driver, wait)
+    result = select_category(driver, wait)
+    print(result)
+
+@allure.title("Test 15: Select skill")
+@allure.description("Tests selecting a skill from the dropdown.")
+@allure.severity(Severity.CRITICAL)
+def test_select_skill(setup):
+    driver, wait = setup
+    open_website(driver, wait)
+    sign_in_to_dashboard(driver, wait)
+    click_assign_skills_button(driver, wait)
+    click_add_skills_button(driver, wait)
+    select_category(driver, wait)
+    result = select_skill(driver, wait)
+    print(result)
+
+@allure.title("Test 16: Fill experience")
+@allure.description("Tests filling the experience field.")
+@allure.severity(Severity.CRITICAL)
+def test_fill_experience(setup):
+    driver, wait = setup
+    open_website(driver, wait)
+    sign_in_to_dashboard(driver, wait)
+    click_assign_skills_button(driver, wait)
+    click_add_skills_button(driver, wait)
+    select_category(driver, wait)
+    select_skill(driver, wait)
+    result = fill_experience(driver, wait)
+    print(result)
+
+@allure.title("Test 17: Fill Version")
+@allure.description("Tests filling the version field.")
+@allure.severity(Severity.CRITICAL)
+def test_fill_version(setup):
+    driver, wait = setup
+    open_website(driver, wait)
+    sign_in_to_dashboard(driver, wait)
+    click_assign_skills_button(driver, wait)
+    click_add_skills_button(driver, wait)
+    select_category(driver, wait)
+    select_skill(driver, wait)
+    fill_experience(driver, wait)
+    result = fill_version(driver, wait)
+    print(result)
+
+@allure.title("Test 18: Fill description")
+@allure.description("Tests filling the description field.")
+@allure.severity(Severity.CRITICAL)
+def test_fill_description(setup):
+    driver, wait = setup
+    open_website(driver, wait)
+    sign_in_to_dashboard(driver, wait)
+    click_assign_skills_button(driver, wait)
+    click_add_skills_button(driver, wait)
+    select_category(driver, wait)
+    select_skill(driver, wait)
+    fill_experience(driver, wait)
+    fill_version(driver, wait)
+    result = fill_description(driver, wait)
+    print(result)
+
+@allure.title("Test 19: Submit form")
+@allure.description("Verifies submitting the skills form.")
+@allure.severity(Severity.CRITICAL)
+def test_submit_form(setup):
+    driver, wait = setup
+    open_website(driver, wait)
+    sign_in_to_dashboard(driver, wait)
+    click_assign_skills_button(driver, wait)
+    click_add_skills_button(driver, wait)
+    select_category(driver, wait)
+    select_skill(driver, wait)
+    fill_experience(driver, wait)
+    fill_version(driver, wait)
+    fill_description(driver, wait)
+    result = submit_form(driver, wait)
+    print(result)
+
+@allure.title("Test 20: Click Self Evaluation button")
+@allure.description("Verifies clicking the Self Evaluation button.")
+@allure.severity(Severity.CRITICAL)
+def test_click_self_evaluation_button(setup):
+    driver, wait = setup
+    open_website(driver, wait)
+    sign_in_to_dashboard(driver, wait)
+    result = click_self_evaluation_button(driver, wait)
+    print(result)
+
+@allure.title("Test 21: Open calendar dropdown")
+@allure.description("Tests opening the calendar dropdown.")
+@allure.severity(Severity.CRITICAL)
+def test_open_calendar_dropdown(setup):
+    driver, wait = setup
+    open_website(driver, wait)
+    sign_in_to_dashboard(driver, wait)
+    click_self_evaluation_button(driver, wait)
+    result = open_calendar_dropdown(driver, wait)
+    print(result)
+
+@allure.title("Test 22: Select calendar option")
+@allure.description("Tests selecting an option from the calendar dropdown.")
+@allure.severity(Severity.CRITICAL)
+def test_select_calendar_option(setup):
+    driver, wait = setup
+    open_website(driver, wait)
+    sign_in_to_dashboard(driver, wait)
+    click_self_evaluation_button(driver, wait)
+    open_calendar_dropdown(driver, wait)
+    result = select_calendar_option(driver, wait)
+    print(result)
+
+@allure.title("Test 23: Click calendar date")
+@allure.description("Verifies clicking a date in the calendar.")
+@allure.severity(Severity.CRITICAL)
+def test_click_calendar_date(setup):
+    driver, wait = setup
+    open_website(driver, wait)
+    sign_in_to_dashboard(driver, wait)
+    click_self_evaluation_button(driver, wait)
+    open_calendar_dropdown(driver, wait)
+    select_calendar_option(driver, wait)
+    result = click_calendar_date(driver, wait)
+    print(result)
+
+@allure.title("Test 24: Scroll to Achievements")
+@allure.description("Tests scrolling to the Achievements section.")
+@allure.severity(Severity.Major)
+def test_scroll_to_achievements(setup):
+    driver, wait = setup
+    open_website(driver, wait)
+    sign_in_to_dashboard(driver, wait)
+    click_self_evaluation_button(driver, wait)
+    result = scroll_to_achievements(driver, wait)
+    print(result)
+
+@allure.title("Test 25: Locate Manager Summary")
+@allure.description("Verifies locating the Manager Summary section.")
+@allure.severity(Severity.Major)
+def test_locate_manager_summary(setup):
+    driver, wait = setup
+    open_website(driver, wait)
+    sign_in_to_dashboard(driver, wait)
+    click_self_evaluation_button(driver, wait)
+    result = locate_manager_summary(driver, wait)
+    print(result)
+
+@allure.title("Test 26: Edit skill")
+@allure.description("Tests editing a skill in the Assign Skills section.")
+@allure.severity(Severity.CRITICAL)
+def test_edit_skill(setup):
+    driver, wait = setup
+    open_website(driver, wait)
+    sign_in_to_dashboard(driver, wait)
+    result = edit_skill(driver, wait)
+    print(result)
+
+@allure.title("Test 27: Remove skill")
+@allure.description("Tests removing a skill in the Assign Skills section.")
+@allure.severity(Severity.CRITICAL)
+def test_remove_skill(setup):
+    driver, wait = setup
+    open_website(driver, wait)
+    sign_in_to_dashboard(driver, wait)
+    edit_skill(driver, wait)  # Precondition for context
+    result = remove_skill(driver, wait)
+    print(result)
+
+@allure.title("Test 28: Accept skill")
+@allure.description("Tests accepting a skill in the Assign Skills section.")
+@allure.severity(Severity.CRITICAL)
+def test_accept_skill(setup):
+    driver, wait = setup
+    open_website(driver, wait)
+    sign_in_to_dashboard(driver, wait)
+    edit_skill(driver, wait)  # Precondition for context
+    result = accept_skill(driver, wait)
+    print(result)
+
+# Main execution
+if __name__ == "__main__":
+    pytest.main(["-q", "--tb=line", "--alluredir=allure-results"])
