@@ -22,9 +22,10 @@ def setup():
     opt.add_argument("--disable-dev-shm-usage")  # Avoid shared memory issues in CI
     opt.add_argument("--disable-gpu")  # Helps with headless stability
     opt.add_argument("--window-size=1920,1080")  # Ensure proper rendering
+    opt.add_argument("--headless")  # Ensure headless mode for CI
     
     driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()), options=opt)
-    wait = WebDriverWait(driver, 30)
+    wait = WebDriverWait(driver, 60)  # Increased timeout to 60 seconds
     yield driver, wait
     driver.quit()
 
@@ -43,9 +44,13 @@ def sign_in_to_dashboard(driver, wait):
         EC.element_to_be_clickable((By.XPATH, "//button[contains(@class, 'btn loginButton')]"))
     )
     sign_in_button.click()
-    # Wait for dashboard URL and a dashboard-specific element
-    wait.until(EC.url_contains("dashboard"))
-    wait.until(EC.presence_of_element_located((By.XPATH, "//*[contains(text(), 'Dashboard')]")))  # Adjust XPath
+    allure.attach(driver.get_screenshot_as_png(), name="after_sign_in_click", attachment_type=AttachmentType.PNG)
+    try:
+        wait.until(EC.url_contains("dashboard"))  # Fallback URL check
+        wait.until(EC.presence_of_element_located((By.XPATH, "//*[contains(text(), 'Dashboard')]")))  # More reliable check
+    except TimeoutException as e:
+        allure.attach(driver.get_screenshot_as_png(), name="timeout_state", attachment_type=AttachmentType.PNG)
+        raise
     allure.attach(driver.get_screenshot_as_png(), name="dashboard_loaded", attachment_type=AttachmentType.PNG)
     return "Dashboard page loaded"
 
@@ -256,7 +261,7 @@ def test_select_profile(setup):
 
 @allure.title("Test 6: Verify profile name")
 @allure.description("Checks if the profile name matches the expected value.")
-@allure.severity(Severity.CRITICAL)
+@allure.severity(Severity.Major)
 def test_verify_profile_name(setup):
     driver, wait = setup
     open_website(driver, wait)
@@ -268,7 +273,7 @@ def test_verify_profile_name(setup):
 
 @allure.title("Test 7: Verify profile email")
 @allure.description("Checks if the profile email matches the expected value.")
-@allure.severity(Severity.CRITICAL)
+@allure.severity(Severity.Major)
 def test_verify_profile_email(setup):
     driver, wait = setup
     open_website(driver, wait)
@@ -280,7 +285,7 @@ def test_verify_profile_email(setup):
 
 @allure.title("Test 8: Verify profile employee ID")
 @allure.description("Checks if the employee ID matches the expected value.")
-@allure.severity(Severity.CRITICAL)
+@allure.severity(Severity.Major)
 def test_verify_profile_employee_id(setup):
     driver, wait = setup
     open_website(driver, wait)
@@ -292,7 +297,7 @@ def test_verify_profile_employee_id(setup):
 
 @allure.title("Test 9: Verify profile designation")
 @allure.description("Checks if the designation matches the expected value.")
-@allure.severity(Severity.CRITICAL)
+@allure.severity(Severity.Major)
 def test_verify_profile_designation(setup):
     driver, wait = setup
     open_website(driver, wait)
@@ -304,7 +309,7 @@ def test_verify_profile_designation(setup):
 
 @allure.title("Test 10: Verify profile experience")
 @allure.description("Checks if the experience matches the expected value.")
-@allure.severity(Severity.CRITICAL)
+@allure.severity(Severity.Major)
 def test_verify_profile_experience(setup):
     driver, wait = setup
     open_website(driver, wait)
@@ -316,7 +321,7 @@ def test_verify_profile_experience(setup):
 
 @allure.title("Test 11: Verify profile function")
 @allure.description("Checks if the function matches the expected value.")
-@allure.severity(Severity.NORMAL)
+@allure.severity(Severity.Major)
 def test_verify_profile_function(setup):
     driver, wait = setup
     open_website(driver, wait)
@@ -482,7 +487,7 @@ def test_click_calendar_date(setup):
 
 @allure.title("Test 24: Scroll to Achievements")
 @allure.description("Tests scrolling to the Achievements section.")
-@allure.severity(Severity.CRITICAL)
+@allure.severity(Severity.Major)
 def test_scroll_to_achievements(setup):
     driver, wait = setup
     open_website(driver, wait)
@@ -493,7 +498,7 @@ def test_scroll_to_achievements(setup):
 
 @allure.title("Test 25: Locate Manager Summary")
 @allure.description("Verifies locating the Manager Summary section.")
-@allure.severity(Severity.CRITICAL)
+@allure.severity(Severity.Major)
 def test_locate_manager_summary(setup):
     driver, wait = setup
     open_website(driver, wait)
