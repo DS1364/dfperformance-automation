@@ -256,7 +256,7 @@ def test_select_profile(setup):
 
 @allure.title("Test 6: Verify profile name")
 @allure.description("Checks if the profile name matches the expected value.")
-@allure.severity(Severity.Major)
+@allure.severity(Severity.CRITICAL)
 def test_verify_profile_name(setup):
     driver, wait = setup
     open_website(driver, wait)
@@ -268,7 +268,7 @@ def test_verify_profile_name(setup):
 
 @allure.title("Test 7: Verify profile email")
 @allure.description("Checks if the profile email matches the expected value.")
-@allure.severity(Severity.Major)
+@allure.severity(Severity.CRITICAL)
 def test_verify_profile_email(setup):
     driver, wait = setup
     open_website(driver, wait)
@@ -280,7 +280,7 @@ def test_verify_profile_email(setup):
 
 @allure.title("Test 8: Verify profile employee ID")
 @allure.description("Checks if the employee ID matches the expected value.")
-@allure.severity(Severity.Major)
+@allure.severity(Severity.CRITICAL)
 def test_verify_profile_employee_id(setup):
     driver, wait = setup
     open_website(driver, wait)
@@ -292,7 +292,7 @@ def test_verify_profile_employee_id(setup):
 
 @allure.title("Test 9: Verify profile designation")
 @allure.description("Checks if the designation matches the expected value.")
-@allure.severity(Severity.Major)
+@allure.severity(Severity.CRITICAL)
 def test_verify_profile_designation(setup):
     driver, wait = setup
     open_website(driver, wait)
@@ -304,7 +304,7 @@ def test_verify_profile_designation(setup):
 
 @allure.title("Test 10: Verify profile experience")
 @allure.description("Checks if the experience matches the expected value.")
-@allure.severity(Severity.Major)
+@allure.severity(Severity.CRITICAL)
 def test_verify_profile_experience(setup):
     driver, wait = setup
     open_website(driver, wait)
@@ -316,7 +316,7 @@ def test_verify_profile_experience(setup):
 
 @allure.title("Test 11: Verify profile function")
 @allure.description("Checks if the function matches the expected value.")
-@allure.severity(Severity.Major)
+@allure.severity(Severity.NORMAL)
 def test_verify_profile_function(setup):
     driver, wait = setup
     open_website(driver, wait)
@@ -482,7 +482,7 @@ def test_click_calendar_date(setup):
 
 @allure.title("Test 24: Scroll to Achievements")
 @allure.description("Tests scrolling to the Achievements section.")
-@allure.severity(Severity.Major)
+@allure.severity(Severity.CRITICAL)
 def test_scroll_to_achievements(setup):
     driver, wait = setup
     open_website(driver, wait)
@@ -493,7 +493,7 @@ def test_scroll_to_achievements(setup):
 
 @allure.title("Test 25: Locate Manager Summary")
 @allure.description("Verifies locating the Manager Summary section.")
-@allure.severity(Severity.Major)
+@allure.severity(Severity.CRITICAL)
 def test_locate_manager_summary(setup):
     driver, wait = setup
     open_website(driver, wait)
