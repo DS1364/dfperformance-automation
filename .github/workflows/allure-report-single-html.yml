@@ -1,0 +1,83 @@
+name: Generate and Send Allure Report (Single HTML)
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  test-and-report:
+    runs-on: ubuntu-latest
+    steps:
+      # Checkout the repository
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      # Set up Python
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      # Install dependencies
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install pytest allure-pytest selenium webdriver-manager
+
+      # Install Chrome
+      - name: Install Chrome
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y google-chrome-stable
+
+      # Start Chrome with remote debugging
+      - name: Start Chrome with remote debugging
+        run: |
+          google-chrome-stable --remote-debugging-port=9014 --no-sandbox --disable-dev-shm-usage --disable-gpu --headless --window-size=1920,1080 &
+          sleep 5  # Give Chrome time to start
+
+      # Install Allure CLI manually
+      - name: Install Allure CLI
+        run: |
+          ALLURE_VERSION=2.30.0  # Use the latest stable version or your preferred version
+          wget https://repo.maven.apache.org/maven2/io/qameta/allure/allure-commandline/$ALLURE_VERSION/allure-commandline-$ALLURE_VERSION.zip
+          unzip allure-commandline-$ALLURE_VERSION.zip
+          sudo mv allure-$ALLURE_VERSION /opt/allure
+          echo "/opt/allure/bin" >> $GITHUB_PATH  # Add Allure to PATH
+
+      # Run tests (continue on error to generate report)
+      - name: Run tests
+        continue-on-error: true
+        run: |
+          pytest test_script.py --alluredir=./allure-results
+
+      # Generate Allure report
+      - name: Generate Allure report
+        if: always()
+        run: |
+          /opt/allure/bin/allure generate ./allure-results -o ./allure-report --clean
+
+      # Upload the report as an artifact
+      - name: Upload Allure report artifact
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: allure-report
+          path: ./allure-report/
+
+      # Send email with the report
+      - name: Send email with report
+        if: always()
+        uses: dawidd6/action-send-mail@v3
+        with:
+          server_address: smtp.gmail.com
+          server_port: 587
+          username: ${{ secrets.EMAIL_USERNAME }}
+          password: ${{ secrets.EMAIL_PASSWORD }}
+          subject: "Allure Report - Single HTML (Run ${{ github.run_number }})"
+          to: your.manager@example.com  # Replace with your manager's email
+          from: ${{ secrets.EMAIL_USERNAME }}
+          body: "Please find the attached Allure report from the latest test run. Tests may have failed."
+          attachments: ./allure-report/index.html
